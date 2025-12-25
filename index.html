@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Школа №25 Нальчик - Дополнительные курсы</title>
+    <link rel="stylesheet" href="zalik.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+       
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-top">
+                <div class="logo">
+                    <i class="fas fa-school"></i>
+                    <div>
+                        <h1>Школа №25</h1>
+                        <p>г. Нальчик, Кабардино-Балкария</p>
+                    </div>
+                </div>
+                <nav>
+                    <a href="index.html" class="active">Главная</a>
+                    <a href="courses.html">Курсы</a>
+                    <a href="about.html">О нас</a>
+                    <a href="login.html">Войти</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="welcome">
+            <h2>Дополнительные курсы школы №25</h2>
+            <p>Платные курсы от наших учителей для углубленного изучения предметов</p>
+            <a href="courses.html" class="btn">Посмотреть курсы</a>
+        </section>
+        
+        <!-- Счетчик посещений -->
+        <section class="visit-counter">
+            <div class="counter-box">
+                <h3><i class="fas fa-users"></i> Всего посетителей</h3>
+                <div class="counter-number" id="visitCount">0</div>
+                <p class="counter-info">Спасибо, что посетили наш сайт!</p>
+            </div>
+            
+            <button class="stats-toggle" onclick="toggleStats()">
+                <i class="fas fa-chart-bar"></i> Показать статистику
+            </button>
+            
+            <div class="stats-details" id="statsDetails">
+                <h4><i class="fas fa-chart-line"></i> Детальная статистика</h4>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="todayVisits">0</div>
+                        <div class="stat-label">Сегодня</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="weekVisits">0</div>
+                        <div class="stat-label">За неделю</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="monthVisits">0</div>
+                        <div class="stat-label">За месяц</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="uniqueVisitors">0</div>
+                        <div class="stat-label">Уникальные</div>
+                    </div>
+                </div>
+                <div style="margin-top: 15px; font-size: 12px; color: #888;">
+                    <p><i class="fas fa-info-circle"></i> Статистика обновляется в реальном времени</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <h2>Почему выбирают нашу школу?</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h3>Опытные учителя</h3>
+                    <p>Преподаватели высшей категории</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Качественное обучение</h3>
+                    <p>Современные методики преподавания</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-users"></i>
+                    <h3>Индивидуальный подход</h3>
+                    <p>Учет особенностей каждого ученика</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3>Школа №25</h3>
+                    <p>г. Нальчик, Кабардино-Балкария</p>
+                    <p>Телефон: +7 (8662) 123-45-67</p>
+                </div>
+                <div>
+                    <p style="font-size: 12px; color: #666; margin-top: 5px;">
+                </div>
+            </div>
+            <p class="copyright">© 2025 Школа №25 г. Нальчик, Кабардино-Балкария</p>
+        </div>
+    </footer>
+
+    <script>
+        class VisitCounter {
+            constructor() {
+                this.totalVisitsKey = 'school_total_visits';
+                this.dailyVisitsKey = 'school_daily_visits';
+                this.weeklyVisitsKey = 'school_weekly_visits';
+                this.monthlyVisitsKey = 'school_monthly_visits';
+                this.uniqueVisitorsKey = 'school_unique_visitors';
+                this.userVisitsKey = 'school_user_visits';
+                this.lastVisitKey = 'school_last_visit';
+                
+                this.init();
+            }
+            
+            init() {
+                // Генерация уникального ID пользователя
+                let userId = localStorage.getItem('school_user_id');
+                if (!userId) {
+                    userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                    localStorage.setItem('school_user_id', userId);
+                }
+                
+                this.userId = userId;
+                this.recordVisit();
+                this.updateDisplay();
+            }
+            
+            getTodayDate() {
+                const now = new Date();
+                return now.toISOString().split('T')[0]; // YYYY-MM-DD
+            }
+            
+            getWeekNumber() {
+                const now = new Date();
+                const startOfYear = new Date(now.getFullYear(), 0, 1);
+                const pastDaysOfYear = (now - startOfYear) / 86400000;
+                return Math.ceil((pastDaysOfYear + startOfYear.getDay() + 1) / 7);
+            }
+            
+            getMonthKey() {
+                const now = new Date();
+                return now.getFullYear() + '-' + (now.getMonth() + 1);
+            }
+            
+            recordVisit() {
+                const today = this.getTodayDate();
+                const now = new Date();
+                
+                
+                let totalVisits = parseInt(localStorage.getItem(this.totalVisitsKey)) || 0;
+                let dailyVisits = JSON.parse(localStorage.getItem(this.dailyVisitsKey)) || {};
+                let weeklyVisits = JSON.parse(localStorage.getItem(this.weeklyVisitsKey)) || {};
+                let monthlyVisits = JSON.parse(localStorage.getItem(this.monthlyVisitsKey)) || {};
+                let uniqueVisitors = JSON.parse(localStorage.getItem(this.uniqueVisitorsKey)) || [];
+                let userVisits = parseInt(localStorage.getItem(this.userVisitsKey)) || 0;
+                
+                
+                totalVisits++;
+                localStorage.setItem(this.totalVisitsKey, totalVisits);
+                
+              
+                if (!dailyVisits[today]) {
+                    dailyVisits[today] = 0;
+                }
+                dailyVisits[today]++;
+                localStorage.setItem(this.dailyVisitsKey, JSON.stringify(dailyVisits));
+                
+             
+                const weekNumber = this.getWeekNumber();
+                const weekKey = now.getFullYear() + '-W' + weekNumber;
+                if (!weeklyVisits[weekKey]) {
+                    weeklyVisits[weekKey] = 0;
+                }
+                weeklyVisits[weekKey]++;
+                localStorage.setItem(this.weeklyVisitsKey, JSON.stringify(weeklyVisits));
+                
+                
+                const monthKey = this.getMonthKey();
+                if (!monthlyVisits[monthKey]) {
+                    monthlyVisits[monthKey] = 0;
+                }
+                monthlyVisits[monthKey]++;
+                localStorage.setItem(this.monthlyVisitsKey, JSON.stringify(monthlyVisits));
+                
+               
+                if (!uniqueVisitors.includes(this.userId)) {
+                    uniqueVisitors.push(this.userId);
+                    localStorage.setItem(this.uniqueVisitorsKey, JSON.stringify(uniqueVisitors));
+                }
+                
+                
+                userVisits++;
+                localStorage.setItem(this.userVisitsKey, userVisits);
+                
+                
+                localStorage.setItem(this.lastVisitKey, now.toISOString());
+                
+                console.log('Посещение зарегистрировано. Всего посещений:', totalVisits);
+            }
+            
+            getStatistics() {
+                const today = this.getTodayDate();
+                const weekNumber = this.getWeekNumber();
+                const weekKey = new Date().getFullYear() + '-W' + weekNumber;
+                const monthKey = this.getMonthKey();
+                
+                const dailyVisits = JSON.parse(localStorage.getItem(this.dailyVisitsKey)) || {};
+                const weeklyVisits = JSON.parse(localStorage.getItem(this.weeklyVisitsKey)) || {};
+                const monthlyVisits = JSON.parse(localStorage.getItem(this.monthlyVisitsKey)) || {};
+                const uniqueVisitors = JSON.parse(localStorage.getItem(this.uniqueVisitorsKey)) || [];
+                
+                return {
+                    total: parseInt(localStorage.getItem(this.totalVisitsKey)) || 0,
+                    today: dailyVisits[today] || 0,
+                    week: weeklyVisits[weekKey] || 0,
+                    month: monthlyVisits[monthKey] || 0,
+                    unique: uniqueVisitors.length,
+                    user: parseInt(localStorage.getItem(this.userVisitsKey)) || 0,
+                    lastVisit: localStorage.getItem(this.lastVisitKey)
+                };
+            }
+            
+            updateDisplay() {
+                const stats = this.getStatistics();
+                
+               
+                const counterElement = document.getElementById('visitCount');
+                if (counterElement) {
+                    counterElement.textContent = stats.total;
+                    counterElement.classList.remove('counter-animated');
+                    void counterElement.offsetWidth; // Сброс анимации
+                    counterElement.classList.add('counter-animated');
+                }
+                
+                
+                const todayElement = document.getElementById('todayVisits');
+                const weekElement = document.getElementById('weekVisits');
+                const monthElement = document.getElementById('monthVisits');
+                const uniqueElement = document.getElementById('uniqueVisitors');
+                const footerElement = document.getElementById('footerVisits');
+                const userElement = document.getElementById('userVisits');
+                
+                if (todayElement) todayElement.textContent = stats.today;
+                if (weekElement) weekElement.textContent = stats.week;
+                if (monthElement) monthElement.textContent = stats.month;
+                if (uniqueElement) uniqueElement.textContent = stats.unique;
+                if (footerElement) footerElement.textContent = stats.total;
+                if (userElement) userElement.textContent = stats.user;
+                
+               
+                document.title = `Школа №25 Нальчик (${stats.total} посещений)`;
+            }
+            
+            resetCounter() {
+                if (confirm('Вы уверены, что хотите сбросить счетчик посещений?')) {
+                    localStorage.removeItem(this.totalVisitsKey);
+                    localStorage.removeItem(this.dailyVisitsKey);
+                    localStorage.removeItem(this.weeklyVisitsKey);
+                    localStorage.removeItem(this.monthlyVisitsKey);
+                    localStorage.removeItem(this.uniqueVisitorsKey);
+                    localStorage.removeItem(this.userVisitsKey);
+                    localStorage.removeItem(this.lastVisitKey);
+                    
+                    this.recordVisit(); // Начать заново
+                    this.updateDisplay();
+                    
+                    alert('Счетчик сброшен!');
+                }
+            }
+            
+            exportStats() {
+                const stats = this.getStatistics();
+                const dataStr = JSON.stringify(stats, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(dataBlob);
+                link.download = `school25_stats_${this.getTodayDate()}.json`;
+                link.click();
+            }
+        }
+        
+        
+        let visitCounter;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            visitCounter = new VisitCounter();
+            
+           
+            setInterval(() => {
+                visitCounter.updateDisplay();
+            }, 1000);
+        });
+        
+        
+        function toggleStats() {
+            const statsDetails = document.getElementById('statsDetails');
+            const toggleBtn = document.querySelector('.stats-toggle');
+            
+            if (statsDetails.style.display === 'block') {
+                statsDetails.style.display = 'none';
+                toggleBtn.innerHTML = '<i class="fas fa-chart-bar"></i> Показать статистику';
+            } else {
+                statsDetails.style.display = 'block';
+                toggleBtn.innerHTML = '<i class="fas fa-chart-bar"></i> Скрыть статистику';
+            }
+        }
+        
+       
+        function resetCounter() {
+            if (visitCounter) {
+                visitCounter.resetCounter();
+            }
+        }
+        
+        function exportStats() {
+            if (visitCounter) {
+                visitCounter.exportStats();
+            }
+        }
+        
+        
+        console.log('Доступные функции для администратора:');
+        console.log('1. resetCounter() - сбросить счетчик');
+        console.log('2. exportStats() - экспортировать статистику');
+    </script>
+</body>
+</html>

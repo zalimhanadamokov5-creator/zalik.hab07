@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Школа №25</title>
+    <style>
+        :root {
+            --primary-blue: #1e4a8a;
+            --secondary-blue: #2c6fbb;
+            --light-blue: #3498db;
+            --very-light-blue: #f0f7ff;
+            --dark-blue: #0d2b50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: var(--very-light-blue);
+            min-height: 100vh;
+        }
+        
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo i {
+            font-size: 32px;
+        }
+        
+        .logo-text h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .logo-text p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.1);
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: var(--light-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border: 2px solid white;
+        }
+        
+        .user-details h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .user-details p {
+            font-size: 12px;
+            opacity: 0.9;
+            background: rgba(255,255,255,0.2);
+            padding: 3px 8px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+        
+        .logout-btn {
+            background: var(--light-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logout-btn:hover {
+            background: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+        
+        
+        .main-nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(44, 111, 187, 0.1);
+            margin-bottom: 30px;
+            border-radius: 0 0 10px 10px;
+            overflow: hidden;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 0;
+        }
+        
+        .nav-menu li {
+            flex: 1;
+        }
+        
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            text-align: center;
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .nav-menu a:hover {
+            background: var(--very-light-blue);
+            color: var(--primary-blue);
+        }
+        
+        .nav-menu a.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--secondary-blue);
+            background: var(--very-light-blue);
+        }
+        
+        /* Контент личного кабинета */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        /* Боковая панель */
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(44, 111, 187, 0.1);
+            height: fit-content;
+            border: 1px solid #e1e8f0;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+        
+        .sidebar-section h3 {
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--very-light-blue);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            color: #4a5568;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .sidebar-menu a:hover {
+            background: var(--very-light-blue);
+            color: var(--primary-blue);
+            border-color: #d1e0ff;
+        }
+        
+        .sidebar-menu a.active {
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: white;
+            border-color: var(--secondary-blue);
+            box-shadow: 0 4px 12px rgba(44, 111, 187, 0.2);
+        }
+        
+        /* Основной контент */
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(44, 111, 187, 0.1);
+            border: 1px solid #e1e8f0;
+        }
+        
+        .welcome-section {
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 20px rgba(44, 111, 187, 0.2);
+        }
+        
+        .welcome-section h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .welcome-section p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        /* Карточки статистики */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #e1e8f0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--light-blue);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(44, 111, 187, 0.15);
+        }
+        
+        .stat-card h3 {
+            font-size: 32px;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+        }
+        
+        .stat-card p {
+            color: #4a5568;
+            font-weight: 500;
+        }
+        
+        /* Блоки контента */
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .content-block {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #e1e8f0;
+        }
+        
+        .content-block h3 {
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--very-light-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Таблицы */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        th {
+            background: var(--very-light-blue);
+            padding: 16px;
+            text-align: left;
+            color: var(--primary-blue);
+            font-weight: 600;
+            border-bottom: 2px solid var(--secondary-blue);
+        }
+        
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #e1e8f0;
+            color: #4a5568;
+        }
+        
+        tr:hover {
+            background: #f8fafc;
+        }
+        
+        /* Кнопки */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(44, 111, 187, 0.3);
+        }
+        
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+        
+        .btn-success {
+            background: var(--light-blue);
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        /* Формы */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e1e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background: #f8fafc;
+        }
+        
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 3px rgba(44, 111, 187, 0.2);
+            background: white;
+        }
+        
+        /* Футер */
+        .footer {
+            background: var(--primary-blue);
+            color: white;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-logo h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .footer-info p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 300px;
+        }
+        
+        .notification.show {
+            display: flex;
+        }
+        
+        .notification.success {
+            background: var(--light-blue);
+        }
+        
+        .notification.error {
+            background: #e74c3c;
+        }
+        
+        .notification.info {
+            background: var(--secondary-blue);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Система сообщений */
+        .messages-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            min-height: 500px;
+        }
+        
+        .conversations-list {
+            border-right: 1px solid #e1e8f0;
+            padding-right: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .conversation-item {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .conversation-item:hover {
+            background: var(--very-light-blue);
+        }
+        
+        .conversation-item.active {
+            background: var(--very-light-blue);
+            border-color: var(--secondary-blue);
+        }
+        
+        .conversation-item.unread {
+            background: #fff5f5;
+            border-color: #ffe0e0;
+        }
+        
+        .conversation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 5px;
+        }
+        
+        .conversation-name {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        
+        .conversation-time {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .conversation-preview {
+            font-size: 14px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .conversation-badge {
+            background: var(--light-blue);
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+        }
+        
+        .messages-area {
+            display: flex;
+            flex-direction: column;
+            max-height: 500px;
+        }
+        
+        .messages-header {
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e1e8f0;
+            margin-bottom: 15px;
+        }
+        
+        .messages-header h4 {
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+        
+        .messages-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+        }
+        
+        .message.sent {
+            margin-left: auto;
+        }
+        
+        .message-content {
+            padding: 12px 16px;
+            border-radius: 18px;
+            position: relative;
+        }
+        
+        .message.sent .message-content {
+            background: var(--secondary-blue);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .message.received .message-content {
+            background: white;
+            color: #333;
+            border: 1px solid #e1e8f0;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .message-time {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+            text-align: right;
+        }
+        
+        .message.sent .message-time {
+            text-align: right;
+        }
+        
+        .message.received .message-time {
+            text-align: left;
+        }
+        
+        .message-input-area {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .message-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e1e8f0;
+            border-radius: 8px;
+            resize: none;
+            font-size: 14px;
+        }
+        
+        .message-input:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+        }
+        
+        .empty-conversation {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+            color: #666;
+            text-align: center;
+        }
+        
+        .empty-conversation i {
+            font-size: 48px;
+            color: var(--light-blue);
+            margin-bottom: 15px;
+        }
+        
+        /* Карточки курсов */
+        .course-card {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #e1e8f0;
+            transition: all 0.3s;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e1e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-blue), var(--primary-blue));
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        /* Сообщения */
+        .message-item {
+            padding: 15px;
+            border-radius: 8px;
+            background: #f8fafc;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--secondary-blue);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .message-item:hover {
+            background: var(--very-light-blue);
+            transform: translateX(5px);
+        }
+        
+        .message-item.unread {
+            border-left-color: #e74c3c;
+            background: #fff5f5;
+        }
+        
+        /* Заявки */
+        .request-item {
+            background: white;
+            border: 1px solid #e1e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .request-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .request-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+            
+            .messages-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .conversations-list {
+                border-right: none;
+                border-bottom: 1px solid #e1e8f0;
+                padding-right: 0;
+                padding-bottom: 20px;
+                max-height: 300px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .user-menu {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-menu {
+                flex-wrap: wrap;
+            }
+            
+            .nav-menu li {
+                flex: 1 0 50%;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-top">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-school"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Школа №25</h1>
+                        <p>г. Нальчик, Кабардино-Балкарская Республика</p>
+                    </div>
+                </div>
+                
+                <div class="user-menu">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">
+                        </div>
+                        <div class="user-details">
+                            <h3 id="userFullName">Загрузка...</h3>
+                            <p id="userTypeBadge">Пользователь</p>
+                        </div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="container">
+            <ul class="nav-menu">
+                <li><a href="#" class="active" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i> Главная</a></li>
+                <li><a href="#" onclick="showSection('profile')"><i class="fas fa-user-circle"></i> Профиль</a></li>
+                <li><a href="#" onclick="showSection('courses')"><i class="fas fa-book-open"></i> Курсы</a></li>
+                <li><a href="#" onclick="showSection('messages')"><i class="fas fa-comments"></i> Сообщения</a></li>
+                <li><a href="#" onclick="showSection('requests')"><i class="fas fa-paper-plane"></i> Мои заявки</a></li>
+                <li><a href="#" onclick="showSection('new-request')"><i class="fas fa-plus-circle"></i> Новая заявка</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+    
+            <main class="main-content">
+                <!-- Раздел: Главная -->
+                <section id="dashboard-section" class="content-section active">
+                    <div class="welcome-section">
+                        <h2 id="welcomeMessage">Добро пожаловать!</h2>
+                        <p id="welcomeSubtitle">Личный кабинет школы №25 г. Нальчик</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3 id="stat1">0</h3>
+                            <p id="statLabel1">Текущих курсов</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="stat2">0.0</h3>
+                            <p id="statLabel2">Средний балл</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="stat3">0%</h3>
+                            <p id="statLabel3">Посещаемость</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="stat4">0</h3>
+                            <p id="statLabel4">Новых сообщений</p>
+                        </div>
+                    </div>
+                    
+                    <div class="content-block">
+                        <h3><i class="fas fa-bell"></i> Последние уведомления</h3>
+                        <div id="notificationsList">
+                            <p class="empty-state"><i class="fas fa-info-circle"></i> Уведомлений пока нет</p>
+                        </div>
+                    </div>
+                    
+                    <div class="content-block">
+                        <h3><i class="fas fa-calendar-day"></i> Ближайшие события</h3>
+                        <div id="upcomingEvents">
+                            <p class="empty-state"><i class="fas fa-info-circle"></i> Событий пока нет</p>
+                        </div>
+                    </div>
+                </section>
+
+         
+                <section id="profile-section" class="content-section">
+                    <div class="content-block">
+                        <h3><i class="fas fa-user-edit"></i> Мой профиль</h3>
+                        <form id="profileForm">
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i> ФИО</label>
+                                <input type="text" id="profileFullName" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-envelope"></i> Email</label>
+                                <input type="email" id="profileEmail" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-phone"></i> Телефон</label>
+                                <input type="tel" id="profilePhone" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-birthday-cake"></i> Дата рождения</label>
+                                <input type="date" id="profileBirthDate">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-home"></i> Адрес</label>
+                                <input type="text" id="profileAddress" placeholder="Город, улица, дом">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-info-circle"></i> О себе</label>
+                                <textarea id="profileAbout" rows="4" placeholder="Расскажите о себе..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Сохранить изменения
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetProfileForm()">
+                                <i class="fas fa-undo"></i> Отмена
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
+                <section id="messages-section" class="content-section">
+                    <div class="content-block">
+                        <h3><i class="fas fa-comments"></i> Сообщения</h3>
+                        
+                        <div class="messages-container">
+                            <!-- Список диалогов -->
+                            <div class="conversations-list">
+                                <div class="conversation-item active" onclick="selectConversation('admin')">
+                                    <div class="conversation-header">
+                                        <div class="conversation-name">
+                                            Администрация школы
+                                            <span id="adminUnreadCount" class="conversation-badge" style="display: none;">0</span>
+                                        </div>
+                                        <div class="conversation-time" id="adminLastTime">Сегодня</div>
+                                    </div>
+                                    <div class="conversation-preview" id="adminLastMessage">
+                                        Отправьте сообщение администратору
+                                    </div>
+                                </div>
+                                
+                                <div id="otherConversations">
+                                    
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="messages-area">
+                                <div class="messages-header">
+                                    <h4 id="currentConversationName">Администрация школы</h4>
+                                    <p id="currentConversationStatus" style="color: #666; font-size: 14px;">
+                                        <i class="fas fa-circle" style="color: #27ae60; font-size: 10px;"></i> Онлайн
+                                    </p>
+                                </div>
+                                
+                                <div class="messages-list" id="messagesList">
+                                    <!-- Сообщения будут загружаться здесь -->
+                                    <div class="empty-conversation">
+                                        <i class="fas fa-comments"></i>
+                                        <h4>Начните диалог</h4>
+                                        <p>Отправьте сообщение администратору школы</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="message-input-area">
+                                    <textarea class="message-input" id="messageInput" 
+                                              placeholder="Введите сообщение..." rows="2"></textarea>
+                                    <button class="btn" onclick="sendMessage()">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-block">
+                        <h3><i class="fas fa-info-circle"></i> Часто задаваемые вопросы</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                            <div style="padding: 15px; background: var(--very-light-blue); border-radius: 8px; border-left: 4px solid var(--secondary-blue);">
+                                <h4 style="margin-bottom: 8px; color: var(--primary-blue);">Как связаться с учителем?</h4>
+                                <p style="font-size: 14px; color: #666;">Через систему сообщений вы можете написать любому преподавателю.</p>
+                            </div>
+                            <div style="padding: 15px; background: var(--very-light-blue); border-radius: 8px; border-left: 4px solid var(--secondary-blue);">
+                                <h4 style="margin-bottom: 8px; color: var(--primary-blue);">Время ответа администрации</h4>
+                                <p style="font-size: 14px; color: #666;">Администратор отвечает в рабочие дни с 9:00 до 18:00.</p>
+                            </div>
+                            <div style="padding: 15px; background: var(--very-light-blue); border-radius: 8px; border-left: 4px solid var(--secondary-blue);">
+                                <h4 style="margin-bottom: 8px; color: var(--primary-blue);">Срочные вопросы</h4>
+                                <p style="font-size: 14px; color: #666;">Для срочных вопросов звоните по телефону +7 (8662) 123-45-67</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="new-request-section" class="content-section">
+                    <div class="content-block">
+                        <h3><i class="fas fa-plus-circle"></i> Создать новую заявку</h3>
+                        <form id="requestForm">
+                            <div class="form-group">
+                                <label><i class="fas fa-heading"></i> Тема заявки</label>
+                                <input type="text" id="requestTitle" placeholder="Например: Заявление на освобождение от занятий" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-list-alt"></i> Тип заявки</label>
+                                <select id="requestType" required>
+                                    <option value="">Выберите тип заявки</option>
+                                    <option value="academic">Учебные вопросы</option>
+                                    <option value="medical">Медицинские вопросы</option>
+                                    <option value="vacation">Отпуск/Освобождение</option>
+                                    <option value="document">Запрос документов</option>
+                                    <option value="other">Другое</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-align-left"></i> Описание</label>
+                                <textarea id="requestDescription" rows="6" placeholder="Подробно опишите вашу заявку..." required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-paperclip"></i> Прикрепить документы (необязательно)</label>
+                                <input type="file" id="requestFiles" multiple>
+                                <small style="color: #666; display: block; margin-top: 5px;">Можно прикрепить несколько файлов</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar"></i> Срок выполнения (если требуется)</label>
+                                <input type="date" id="requestDeadline">
+                            </div>
+                            
+                            <button type="submit" class="btn">
+                                <i class="fas fa-paper-plane"></i> Отправить заявку
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="showSection('dashboard')">
+                                <i class="fas fa-times"></i> Отмена
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="content-block">
+                        <h3><i class="fas fa-info-circle"></i> Информация о заявках</h3>
+                        <p>Заявки отправляются напрямую администрации школы. Среднее время рассмотрения: 1-3 рабочих дня.</p>
+                        <p>Вы можете отслеживать статус ваших заявок в разделе "Мои заявки".</p>
+                    </div>
+                </section>
+
+                <!-- Раздел: Мои заявки -->
+                <section id="requests-section" class="content-section">
+                    <div class="content-block">
+                        <h3><i class="fas fa-list"></i> Мои заявки</h3>
+                        <div id="requestsList">
+                            <p class="empty-state"><i class="fas fa-info-circle"></i> У вас пока нет заявок</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Раздел: Курсы -->
+                <section id="courses-section" class="content-section">
+                    <div class="content-block">
+                        <h3><i class="fas fa-book"></i> Мои курсы</h3>
+                        <div id="coursesList">
+                            <p class="empty-state"><i class="fas fa-info-circle"></i> Курсы пока не добавлены</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Раздел: Успеваемость -->
+                <section id="grades-section" class="content-section">
+                    <div class="content-block">
+                        <h3><i class="fas fa-chart-line"></i> Успеваемость</h3>
+                        <div id="gradesContent">
+                            <p class="empty-state"><i class="fas fa-info-circle"></i> Данные об успеваемости пока не доступны</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Школа №25</h3>
+                    <p>г. Нальчик, Кабардино-Балкарская Республика</p>
+                </div>
+                <div class="footer-info">
+                    <p><i class="fas fa-phone"></i> +7 (8662) 123-45-67</p>
+                    <p><i class="fas fa-envelope"></i> info@school25-nalchik.ru</p>
+                    <p><i class="fas fa-clock"></i> Пн-Пт: 8:00-18:00</p>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2025 Государственное бюджетное общеобразовательное учреждение "Школа №25" г. Нальчик
+            </div>
+        </div>
+    </footer>
+
+    <!-- Уведомление -->
+    <div id="notification" class="notification">
+        <span id="notificationIcon"></span>
+        <span id="notificationText"></span>
+    </div>
+
+    <script>
+        // Текущий пользователь
+        let currentUser = null;
+        let userProfile = {};
+        let userRequests = [];
+        let userMessages = [];
+        let currentConversation = 'admin';
+        
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCurrentUser();
+            setupEventListeners();
+            updateDashboard();
+            loadMessages();
+        });
+        
+        // Загрузка текущего пользователя
+        function loadCurrentUser() {
+            const userJson = sessionStorage.getItem('currentUser');
+            if (!userJson) {
+                // Если пользователь не авторизован, перенаправляем на страницу входа
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(userJson);
+            loadUserProfile();
+            loadUserRequests();
+            updateUserInfo();
+            
+            // Показываем уведомление о входе
+            showNotification(`Добро пожаловать, ${currentUser.fullName}!`, 'success');
+        }
+        
+        // Загрузка профиля пользователя
+        function loadUserProfile() {
+            const profileKey = `school25_profile_${currentUser.username}`;
+            const savedProfile = localStorage.getItem(profileKey);
+            
+            if (savedProfile) {
+                userProfile = JSON.parse(savedProfile);
+            } else {
+                // Создаем базовый профиль
+                userProfile = {
+                    fullName: currentUser.fullName,
+                    email: currentUser.email,
+                    phone: currentUser.phone,
+                    birthDate: '',
+                    address: '',
+                    about: '',
+                    avatarColor: '#3498db',
+                    lastLogin: new Date().toISOString()
+                };
+                saveUserProfile();
+            }
+        }
+        
+        // Загрузка сообщений пользователя
+        function loadMessages() {
+            const messagesKey = `school25_messages_${currentUser.username}`;
+            const savedMessages = localStorage.getItem(messagesKey);
+            
+            if (savedMessages) {
+                userMessages = JSON.parse(savedMessages);
+            } else {
+                // Создаем начальные сообщения от администратора
+                userMessages = [
+                    {
+                        id: 'msg-1',
+                        sender: 'admin',
+                        receiver: currentUser.username,
+                        text: 'Добро пожаловать в систему школы №25! Если у вас есть вопросы, напишите мне здесь.',
+                        timestamp: new Date().toISOString(),
+                        read: false,
+                        conversation: 'admin'
+                    }
+                ];
+                saveMessages();
+            }
+            
+            updateMessagesDisplay();
+        }
+        
+        // Сохранение сообщений
+        function saveMessages() {
+            const messagesKey = `school25_messages_${currentUser.username}`;
+            localStorage.setItem(messagesKey, JSON.stringify(userMessages));
+            
+            // Также сохраняем в общий список сообщений для администратора
+            saveToAdminMessages();
+        }
+        
+        // Сохранение в общий список сообщений
+        function saveToAdminMessages() {
+            let adminMessages = JSON.parse(localStorage.getItem('admin_messages')) || [];
+            
+            // Добавляем новые сообщения
+            userMessages.forEach(message => {
+                if (!adminMessages.find(m => m.id === message.id)) {
+                    adminMessages.push({
+                        ...message,
+                        senderName: message.sender === 'admin' ? 'Администратор' : currentUser.fullName,
+                        senderType: message.sender === 'admin' ? 'admin' : currentUser.type
+                    });
+                }
+            });
+            
+            localStorage.setItem('admin_messages', JSON.stringify(adminMessages));
+        }
+        
+        // Загрузка заявок пользователя
+        function loadUserRequests() {
+            const requestsKey = `school25_requests_${currentUser.username}`;
+            const savedRequests = localStorage.getItem(requestsKey);
+            
+            if (savedRequests) {
+                userRequests = JSON.parse(savedRequests);
+            } else {
+                userRequests = [];
+            }
+        }
+        
+        // Сохранение заявок пользователя
+        function saveUserRequests() {
+            const requestsKey = `school25_requests_${currentUser.username}`;
+            localStorage.setItem(requestsKey, JSON.stringify(userRequests));
+            
+            // Также сохраняем в общий список заявок для администратора
+            saveToAdminRequests();
+        }
+        
+        // Сохранение в общий список заявок
+        function saveToAdminRequests() {
+            let adminRequests = JSON.parse(localStorage.getItem('admin_requests')) || [];
+            
+            // Добавляем новые заявки
+            userRequests.forEach(request => {
+                if (!adminRequests.find(r => r.id === request.id)) {
+                    adminRequests.push({
+                        ...request,
+                        userId: currentUser.username,
+                        userFullName: currentUser.fullName,
+                        userType: currentUser.type
+                    });
+                }
+            });
+            
+            localStorage.setItem('admin_requests', JSON.stringify(adminRequests));
+        }
+        
+        // Сохранение профиля пользователя
+        function saveUserProfile() {
+            const profileKey = `school25_profile_${currentUser.username}`;
+            localStorage.setItem(profileKey, JSON.stringify(userProfile));
+        }
+        
+        // Обновление информации о пользователе
+        function updateUserInfo() {
+            if (!currentUser) return;
+            
+            // Основная информация
+            document.getElementById('userFullName').textContent = currentUser.fullName;
+            document.getElementById('userTypeBadge').textContent = getUserTypeLabel(currentUser.type);
+            document.getElementById('welcomeMessage').textContent = `Добро пожаловать, ${currentUser.fullName}!`;
+            document.getElementById('welcomeSubtitle').textContent = getUserWelcomeSubtitle(currentUser.type);
+            
+            // Аватар
+            const avatar = document.getElementById('userAvatar');
+            const avatarIcon = getUserAvatarIcon(currentUser.type);
+            
+            avatar.innerHTML = `<i class="fas ${avatarIcon}"></i>`;
+            avatar.style.background = `linear-gradient(135deg, ${userProfile.avatarColor} 0%, var(--secondary-blue) 100%)`;
+            
+            // Заполнение формы профиля
+            document.getElementById('profileFullName').value = userProfile.fullName || '';
+            document.getElementById('profileEmail').value = userProfile.email || '';
+            document.getElementById('profilePhone').value = userProfile.phone || '';
+            document.getElementById('profileBirthDate').value = userProfile.birthDate || '';
+            document.getElementById('profileAddress').value = userProfile.address || '';
+            document.getElementById('profileAbout').value = userProfile.about || '';
+        }
+        
+        // Получение метки типа пользователя
+        function getUserTypeLabel(type) {
+            const labels = {
+                'admin': 'Администратор',
+                'teacher': 'Учитель',
+                'student': 'Ученик',
+                'parent': 'Родитель'
+            };
+            return labels[type] || 'Пользователь';
+        }
+        
+        // Получение приветствия для типа пользователя
+        function getUserWelcomeSubtitle(type) {
+            const subtitles = {
+                'admin': 'Административная панель школы №25',
+                'teacher': 'Панель управления учебным процессом',
+                'student': 'Панель обучения и успеваемости',
+                'parent': 'Панель контроля успеваемости ребенка'
+            };
+            return subtitles[type] || 'Личный кабинет школы №25';
+        }
+        
+        // Получение иконки для аватара
+        function getUserAvatarIcon(type) {
+            const icons = {
+                'admin': 'fa-user-shield',
+                'teacher': 'fa-chalkboard-teacher',
+                'student': 'fa-user-graduate',
+                'parent': 'fa-user-friends'
+            };
+            return icons[type] || 'fa-user';
+        }
+        
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Форма профиля
+            document.getElementById('profileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveProfile();
+            });
+            
+            // Форма заявки
+            document.getElementById('requestForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitRequest();
+            });
+            
+            // Форма отправки сообщения
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+        
+        // Обновление отображения сообщений
+        function updateMessagesDisplay() {
+            // Подсчет непрочитанных сообщений от администратора
+            const adminUnreadCount = userMessages.filter(m => 
+                m.conversation === 'admin' && m.sender === 'admin' && !m.read
+            ).length;
+            
+            // Обновление счетчика
+            const adminBadge = document.getElementById('adminUnreadCount');
+            if (adminUnreadCount > 0) {
+                adminBadge.textContent = adminUnreadCount;
+                adminBadge.style.display = 'inline-block';
+            } else {
+                adminBadge.style.display = 'none';
+            }
+            
+            // Обновление статистики
+            updateDashboard();
+            
+            // Если открыт диалог с администратором, показываем сообщения
+            if (currentConversation === 'admin') {
+                displayConversation('admin');
+            }
+        }
+        
+        // Отображение диалога
+        function displayConversation(conversationId) {
+            currentConversation = conversationId;
+            
+            // Обновляем активный элемент в списке
+            document.querySelectorAll('.conversation-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.conversation-item[onclick*="'${conversationId}'"]`).classList.add('active');
+            
+            // Получаем сообщения для этого диалога
+            const conversationMessages = userMessages.filter(m => m.conversation === conversationId);
+            
+            // Сортируем по времени
+            conversationMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+            
+            // Отображаем сообщения
+            const messagesList = document.getElementById('messagesList');
+            
+            if (conversationMessages.length === 0) {
+                messagesList.innerHTML = `
+                    <div class="empty-conversation">
+                        <i class="fas fa-comments"></i>
+                        <h4>Начните диалог</h4>
+                        <p>Отправьте сообщение администратору школы</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            conversationMessages.forEach(message => {
+                const isSent = message.sender !== 'admin';
+                const time = formatMessageTime(message.timestamp);
+                
+                html += `
+                    <div class="message ${isSent ? 'sent' : 'received'}">
+                        <div class="message-content">
+                            ${message.text}
+                        </div>
+                        <div class="message-time">
+                            ${time}
+                        </div>
+                    </div>
+                `;
+                
+                // Помечаем как прочитанное
+                if (!message.read && !isSent) {
+                    message.read = true;
+                }
+            });
+            
+            messagesList.innerHTML = html;
+            
+            // Прокручиваем вниз
+            messagesList.scrollTop = messagesList.scrollHeight;
+            
+            // Сохраняем изменения
+            saveMessages();
+        }
+        
+        // Выбор диалога
+        function selectConversation(conversationId) {
+            displayConversation(conversationId);
+        }
+        
+        // Отправка сообщения
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            // Создаем новое сообщение
+            const newMessage = {
+                id: 'msg-' + Date.now(),
+                sender: currentUser.username,
+                receiver: 'admin',
+                text: text,
+                timestamp: new Date().toISOString(),
+                read: false,
+                conversation: currentConversation
+            };
+            
+            // Добавляем в список сообщений
+            userMessages.push(newMessage);
+            
+            // Сохраняем
+            saveMessages();
+            
+            // Очищаем поле ввода
+            input.value = '';
+            
+            // Обновляем отображение
+            updateMessagesDisplay();
+            
+            // Показываем уведомление
+            showNotification('Сообщение отправлено администратору', 'success');
+        }
+        
+        // Форматирование времени сообщения
+        function formatMessageTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            
+            if (diffMins < 1) return 'только что';
+            if (diffMins < 60) return `${diffMins} мин назад`;
+            
+            const diffHours = Math.floor(diffMins / 60);
+            if (diffHours < 24) return `${diffHours} ч назад`;
+            
+            return date.toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'short',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        // Переключение между разделами
+        function showSection(sectionId) {
+            // Скрыть все разделы
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Показать выбранный раздел
+            document.getElementById(sectionId + '-section').classList.add('active');
+            
+            // Обновить активные пункты меню
+            document.querySelectorAll('.nav-menu a, .sidebar-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Обновить главное меню
+            const navLink = document.querySelector(`.nav-menu a[onclick*="${sectionId}"]`);
+            if (navLink) navLink.classList.add('active');
+            
+            // Обновить боковое меню
+            const sidebarLink = document.querySelector(`.sidebar-menu a[onclick*="${sectionId}"]`);
+            if (sidebarLink) sidebarLink.classList.add('active');
+            
+            // Обновить данные раздела
+            updateSection(sectionId);
+        }
+        
+        // Обновление данных раздела
+        function updateSection(sectionId) {
+            switch(sectionId) {
+                case 'dashboard':
+                    updateDashboard();
+                    break;
+                case 'requests':
+                    updateRequests();
+                    break;
+                case 'messages':
+                    loadMessages();
+                    break;
+                case 'courses':
+                    updateCourses();
+                    break;
+                case 'grades':
+                    updateGrades();
+                    break;
+            }
+        }
+        
+        // Обновление главной панели
+        function updateDashboard() {
+            if (!currentUser) return;
+            
+            // Подсчет непрочитанных сообщений
+            const unreadMessages = userMessages.filter(m => m.sender === 'admin' && !m.read).length;
+            
+            // Обновление статистики
+            const stats = generateUserStats(currentUser.type);
+            
+            document.getElementById('stat1').textContent = stats.courses;
+            document.getElementById('stat2').textContent = stats.averageGrade;
+            document.getElementById('stat3').textContent = stats.attendance + '%';
+            document.getElementById('stat4').textContent = unreadMessages;
+            
+            // Обновление меток статистики
+            const statLabels = getStatLabels(currentUser.type);
+            document.getElementById('statLabel1').textContent = statLabels.label1;
+            document.getElementById('statLabel2').textContent = statLabels.label2;
+            document.getElementById('statLabel3').textContent = statLabels.label3;
+            document.getElementById('statLabel4').textContent = statLabels.label4;
+            
+            // Обновление уведомлений
+            updateNotifications();
+            
+            // Обновление событий
+            updateEvents();
+        }
+        
+        // Генерация статистики для пользователя
+        function generateUserStats(userType) {
+            const baseStats = {
+                courses: 0,
+                averageGrade: 0.0,
+                attendance: 0,
+                newMessages: 0
+            };
+            
+            switch(userType) {
+                case 'student':
+                    baseStats.courses = 5;
+                    baseStats.averageGrade = 4.2;
+                    baseStats.attendance = 92;
+                    break;
+                case 'teacher':
+                    baseStats.courses = 3;
+                    baseStats.averageGrade = 4.5;
+                    baseStats.attendance = 100;
+                    break;
+                case 'parent':
+                    baseStats.courses = 2;
+                    baseStats.averageGrade = 4.0;
+                    baseStats.attendance = 88;
+                    break;
+                case 'admin':
+                    baseStats.courses = 12;
+                    baseStats.averageGrade = 4.3;
+                    baseStats.attendance = 95;
+                    break;
+            }
+            
+            return baseStats;
+        }
+        
+        // Получение меток статистики
+        function getStatLabels(userType) {
+            switch(userType) {
+                case 'student':
+                    return {
+                        label1: 'Текущих курсов',
+                        label2: 'Средний балл',
+                        label3: 'Посещаемость',
+                        label4: 'Новых сообщений'
+                    };
+                case 'teacher':
+                    return {
+                        label1: 'Ведомых курсов',
+                        label2: 'Средний балл класса',
+                        label3: 'Проведено занятий',
+                        label4: 'Новых сообщений'
+                    };
+                case 'parent':
+                    return {
+                        label1: 'Курсов ребенка',
+                        label2: 'Успеваемость',
+                        label3: 'Посещаемость ребенка',
+                        label4: 'Новых сообщений'
+                    };
+                case 'admin':
+                    return {
+                        label1: 'Всего курсов',
+                        label2: 'Средний балл школы',
+                        label3: 'Общая посещаемость',
+                        label4: 'Новых сообщений'
+                    };
+                default:
+                    return {
+                        label1: 'Курсы',
+                        label2: 'Балл',
+                        label3: 'Посещаемость',
+                        label4: 'Сообщения'
+                    };
+            }
+        }
+        
+        // Обновление заявок
+        function updateRequests() {
+            const list = document.getElementById('requestsList');
+            list.innerHTML = '';
+            
+            if (userRequests.length === 0) {
+                list.innerHTML = '<p class="empty-state"><i class="fas fa-info-circle"></i> У вас пока нет заявок</p>';
+                return;
+            }
+            
+            // Сортируем заявки по дате (новые сверху)
+            const sortedRequests = [...userRequests].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            sortedRequests.forEach(request => {
+                const item = document.createElement('div');
+                item.className = 'request-item';
+                
+                const statusClass = `status-${request.status}`;
+                const statusText = getStatusText(request.status);
+                const typeText = getRequestTypeText(request.type);
+                
+                item.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                        <div>
+                            <h4 style="margin: 0 0 5px 0; color: var(--primary-blue);">${request.title}</h4>
+                            <p style="margin: 0; color: #666; font-size: 14px;">
+                                <i class="fas fa-tag"></i> ${typeText}
+                            </p>
+                        </div>
+                        <div>
+                            <span class="request-status ${statusClass}">${statusText}</span>
+                        </div>
+                    </div>
+                    
+                    <p style="margin: 10px 0; color: #555;">${request.description}</p>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #888;">
+                        <div>
+                            <i class="far fa-calendar"></i> Создана: ${formatDate(request.createdAt)}
+                            ${request.deadline ? `<br><i class="far fa-clock"></i> Срок: ${formatDate(request.deadline)}` : ''}
+                        </div>
+                        <div>
+                            ID: ${request.id}
+                        </div>
+                    </div>
+                    
+                    ${request.adminComment ? `
+                        <div style="margin-top: 15px; padding: 10px; background: var(--very-light-blue); border-radius: 5px; border-left: 3px solid var(--secondary-blue);">
+                            <strong><i class="fas fa-comment"></i> Ответ администратора:</strong>
+                            <p style="margin: 5px 0 0 0;">${request.adminComment}</p>
+                            <div style="font-size: 11px; color: #666; margin-top: 5px;">
+                                <i class="far fa-calendar-alt"></i> ${formatDate(request.updatedAt)}
+                            </div>
+                        </div>
+                    ` : ''}
+                `;
+                
+                list.appendChild(item);
+            });
+        }
+        
+        // Отправка заявки
+        function submitRequest() {
+            const title = document.getElementById('requestTitle').value;
+            const type = document.getElementById('requestType').value;
+            const description = document.getElementById('requestDescription').value;
+            const deadline = document.getElementById('requestDeadline').value;
+            
+            if (!title || !type || !description) {
+                showNotification('Заполните все обязательные поля!', 'error');
+                return;
+            }
+            
+            const newRequest = {
+                id: 'REQ-' + Date.now(),
+                title: title,
+                type: type,
+                description: description,
+                status: 'pending',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                deadline: deadline || null,
+                files: [],
+                adminComment: null
+            };
+            
+            userRequests.push(newRequest);
+            saveUserRequests();
+            
+            // Очистка формы
+            document.getElementById('requestForm').reset();
+            
+            // Обновление интерфейса
+            updateRequests();
+            updateDashboard();
+            
+            showNotification('Заявка успешно отправлена администратору!', 'success');
+            
+            // Автоматически создаем сообщение о новой заявке
+            const notificationMessage = {
+                id: 'msg-' + Date.now() + '-req',
+                sender: 'admin',
+                receiver: currentUser.username,
+                text: `Ваша заявка "${title}" принята в обработку. Мы рассмотрим её в ближайшее время.`,
+                timestamp: new Date().toISOString(),
+                read: false,
+                conversation: 'admin'
+            };
+            
+            userMessages.push(notificationMessage);
+            saveMessages();
+            updateMessagesDisplay();
+            
+            // Переход к списку заявок
+            showSection('requests');
+        }
+        
+        // Вспомогательные функции
+        function getStatusText(status) {
+            const statuses = {
+                'pending': 'На рассмотрении',
+                'approved': 'Одобрена',
+                'rejected': 'Отклонена'
+            };
+            return statuses[status] || status;
+        }
+        
+        function getRequestTypeText(type) {
+            const types = {
+                'academic': 'Учебные вопросы',
+                'medical': 'Медицинские вопросы',
+                'vacation': 'Отпуск/Освобождение',
+                'document': 'Запрос документов',
+                'other': 'Другое'
+            };
+            return types[type] || type;
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU') + ' ' + date.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
+        }
+        
+        // Обновление уведомлений
+        function updateNotifications() {
+            const notifications = getNotificationsForUser(currentUser.type);
+            
+            const list = document.getElementById('notificationsList');
+            list.innerHTML = '';
+            
+            if (notifications.length === 0) {
+                list.innerHTML = '<p class="empty-state"><i class="fas fa-info-circle"></i> Уведомлений пока нет</p>';
+                return;
+            }
+            
+            notifications.forEach(notif => {
+                const item = document.createElement('div');
+                item.className = 'message-item ' + (notif.unread ? 'unread' : '');
+                item.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <strong>${notif.title}</strong>
+                            <p style="margin: 8px 0; color: #666;">${notif.message}</p>
+                            <div style="font-size: 12px; color: #888;">
+                                <i class="far fa-clock"></i> ${notif.date}
+                            </div>
+                        </div>
+                        <span style="background: var(--light-blue); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
+                            ${notif.type.toUpperCase()}
+                        </span>
+                    </div>
+                `;
+                item.onclick = () => markNotificationAsRead(notif.id);
+                list.appendChild(item);
+            });
+        }
+        
+        // Получение уведомлений для пользователя
+        function getNotificationsForUser(userType) {
+            const baseNotifications = [
+                { id: 1, title: 'Добро пожаловать!', message: 'Вы успешно вошли в личный кабинет.', date: 'Только что', type: 'info', unread: true },
+                { id: 2, title: 'Система сообщений', message: 'Теперь вы можете общаться с администратором напрямую.', date: 'Вчера', type: 'info', unread: false }
+            ];
+            
+            return baseNotifications;
+        }
+        
+        // Сохранение профиля
+        function saveProfile() {
+            userProfile.fullName = document.getElementById('profileFullName').value;
+            userProfile.email = document.getElementById('profileEmail').value;
+            userProfile.phone = document.getElementById('profilePhone').value;
+            userProfile.birthDate = document.getElementById('profileBirthDate').value;
+            userProfile.address = document.getElementById('profileAddress').value;
+            userProfile.about = document.getElementById('profileAbout').value;
+            
+            saveUserProfile();
+            updateUserInfo();
+            
+            showNotification('Профиль успешно сохранен!', 'success');
+        }
+        
+        // Сброс формы профиля
+        function resetProfileForm() {
+            updateUserInfo();
+            showSection('dashboard');
+        }
+        
+        // Показать уведомление
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            const icon = document.getElementById('notificationIcon');
+            const text = document.getElementById('notificationText');
+            
+            // Устанавливаем иконку
+            const icons = {
+                'success': 'fa-check-circle',
+                'error': 'fa-exclamation-circle',
+                'info': 'fa-info-circle'
+            };
+            icon.className = `fas ${icons[type]}`;
+            
+            text.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            // Автоматическое скрытие через 5 секунд
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+        
+        // Выход из системы
+        function logout() {
+            if (confirm('Вы уверены, что хотите выйти из системы?')) {
+                sessionStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>

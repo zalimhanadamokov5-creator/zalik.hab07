@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - Школа №25</title>
+    <style>
+        :root {
+            --primary-blue: #1e4a8a;
+            --secondary-blue: #2c6fbb;
+            --light-blue: #3498db;
+            --very-light-blue: #f0f7ff;
+            --dark-blue: #0d2b50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: var(--very-light-blue);
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Боковое меню */
+        .sidebar {
+            width: 250px;
+            background: var(--primary-blue);
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .logo h2 {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+        
+        .logo p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .menu {
+            margin-bottom: 40px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .menu-item.active {
+            background: var(--light-blue);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+        
+        .menu-item i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .user-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+        
+        .avatar {
+            width: 45px;
+            height: 45px;
+            background: var(--light-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            border: 2px solid white;
+        }
+        
+        /* Основной контент */
+        .main {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            color: var(--primary-blue);
+            font-size: 28px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid var(--light-blue);
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .stat-card h3 {
+            font-size: 32px;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+        
+        .stat-card p {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .card h3 {
+            margin-bottom: 25px;
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--very-light-blue);
+            padding-bottom: 15px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        th {
+            background: var(--very-light-blue);
+            padding: 18px;
+            text-align: left;
+            color: var(--primary-blue);
+            font-weight: 600;
+            border-bottom: 2px solid var(--secondary-blue);
+        }
+        
+        td {
+            padding: 18px;
+            border-bottom: 1px solid #e1e8f0;
+            color: #4a5568;
+        }
+        
+        tr:hover {
+            background: var(--very-light-blue);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(44, 111, 187, 0.3);
+        }
+        
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+        
+        .btn-success {
+            background: var(--light-blue);
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+        }
+        
+        .btn-warning {
+            background: #f39c12;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e1e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background: #f8fafc;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 3px rgba(44, 111, 187, 0.2);
+            background: white;
+        }
+        
+        .welcome {
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0 40px 0;
+            box-shadow: 0 6px 20px rgba(44, 111, 187, 0.2);
+        }
+        
+        .welcome h2 {
+            margin-bottom: 15px;
+            font-size: 32px;
+        }
+        
+        .welcome p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+        
+        .request-item {
+            background: white;
+            border: 1px solid #e1e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .request-item:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        
+        .request-status {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .user-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--very-light-blue);
+            color: var(--primary-blue);
+            margin-left: 10px;
+        }
+        
+        .badge-student {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .badge-teacher {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .badge-parent {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            color: var(--light-blue);
+            margin-bottom: 15px;
+        }
+        
+        /* Мобильная версия */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            
+            .main {
+                margin-left: 0;
+            }
+            
+            .user-info {
+                position: relative;
+                bottom: auto;
+                left: auto;
+                right: auto;
+                margin-top: 20px;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .header-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    
+    <div class="sidebar">
+        <div class="logo">
+            <h2>Школа №25</h2>
+            <p>Админ-панель</p>
+        </div>
+        
+        <div class="menu">
+            <a href="#" class="menu-item active" onclick="showSection('dashboard')">
+                <i class="fas fa-tachometer-alt"></i> Панель управления
+            </a>
+            <a href="#" class="menu-item" onclick="showSection('requests')">
+                <i class="fas fa-inbox"></i> Заявки
+                <span id="pendingCount" class="user-badge" style="margin-left: auto;">0</span>
+            </a>
+            <a href="#" class="menu-item" onclick="showSection('users')">
+                <i class="fas fa-users"></i> Пользователи
+            </a>
+            <a href="#" class="menu-item" onclick="showSection('courses')">
+                <i class="fas fa-book"></i> Курсы
+            </a>
+        </div>
+        
+        <div class="user-info">
+            <div class="avatar">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div>
+                <h4>Администратор</h4>
+                <p>admin@school25.ru</p>
+            </div>
+            <a href="login.html" style="margin-left: auto; color: white;" title="Выйти">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="main">
+        <!-- Шапка -->
+        <div class="header">
+            <h1 id="pageTitle">Панель управления</h1>
+            <div class="header-actions">
+                <button class="btn btn-success" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i> Обновить
+                </button>
+                <a href="dashboard.html" class="btn">
+                    <i class="fas fa-user"></i> Личный кабинет
+                </a>
+                <a href="login.html" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </a>
+            </div>
+        </div>
+       
+        <div id="dashboard-section" class="content-section">
+            <div class="welcome">
+                <h2>Добро пожаловать, Администратор!</h2>
+                <p>Логин: admin | Пароль: admin</p>
+                <p>Управление школьной системой и обработка заявок</p>
+            </div>
+            
+            <!-- Статистика -->
+            <div class="stats">
+                <div class="stat-card">
+                    <h3 id="totalUsers">0</h3>
+                    <p>Всего пользователей</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="pendingRequests">0</h3>
+                    <p>Заявок на рассмотрении</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalCourses">0</h3>
+                    <p>Активных курсов</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="todayRequests">0</h3>
+                    <p>Заявок сегодня</p>
+                </div>
+            </div>
+            
+           
+            <div class="card">
+                <h3><i class="fas fa-bolt"></i> Быстрые действия</h3>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <button class="btn" onclick="showSection('requests')">
+                        <i class="fas fa-inbox"></i> Проверить заявки
+                    </button>
+                    <button class="btn btn-success" onclick="addNewUser()">
+                        <i class="fas fa-user-plus"></i> Добавить пользователя
+                    </button>
+                    <button class="btn" onclick="showSection('courses')">
+                        <i class="fas fa-book-medical"></i> Создать курс
+                    </button>
+                    <button class="btn btn-warning" onclick="generateReport()">
+                        <i class="fas fa-file-export"></i> Экспорт отчета
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-history"></i> Последние заявки</h3>
+                <div id="recentRequests">
+                    <p class="empty-state"><i class="fas fa-info-circle"></i> Заявок пока нет</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="requests-section" class="content-section" style="display: none;">
+            <div class="card">
+                <h3><i class="fas fa-inbox"></i> Управление заявками</h3>
+                
+                <!-- Фильтры заявок -->
+                <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
+                    <select id="filterStatus" class="btn-small" onchange="filterRequests()" style="padding: 10px;">
+                        <option value="all">Все статусы</option>
+                        <option value="pending">На рассмотрении</option>
+                        <option value="approved">Одобренные</option>
+                        <option value="rejected">Отклоненные</option>
+                    </select>
+                    <select id="filterType" class="btn-small" onchange="filterRequests()" style="padding: 10px;">
+                        <option value="all">Все типы</option>
+                        <option value="academic">Учебные</option>
+                        <option value="medical">Медицинские</option>
+                        <option value="vacation">Отпуск</option>
+                        <option value="document">Документы</option>
+                        <option value="other">Другое</option>
+                    </select>
+                    <input type="date" id="filterDate" class="btn-small" onchange="filterRequests()" style="padding: 10px;">
+                    <button class="btn btn-secondary btn-small" onclick="resetFilters()">
+                        <i class="fas fa-redo"></i> Сбросить
+                    </button>
+                </div>
+                <div id="adminRequestsList">
+                    <p class="empty-state"><i class="fas fa-info-circle"></i> Заявок пока нет</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="users-section" class="content-section" style="display: none;">
+            <div class="card">
+                <h3><i class="fas fa-users"></i> Управление пользователями</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ФИО</th>
+                            <th>Тип</th>
+                            <th>Email</th>
+                            <th>Телефон</th>
+                            <th>Дата регистрации</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable">
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #666;">
+                                <i class="fas fa-spinner fa-spin"></i> Загрузка данных...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-success" onclick="addNewUser()">
+                        <i class="fas fa-user-plus"></i> Добавить нового пользователя
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="courses-section" class="content-section" style="display: none;">
+            <div class="card">
+                <h3><i class="fas fa-book"></i> Управление курсами</h3>
+                <form id="addCourseForm">
+                    <div class="form-group">
+                        <label><i class="fas fa-heading"></i> Название курса</label>
+                        <input type="text" id="courseName" placeholder="Например: Математика 10-11 класс" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-user-tie"></i> Преподаватель</label>
+                        <input type="text" id="courseTeacher" placeholder="ФИО преподавателя" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-align-left"></i> Описание курса</label>
+                        <textarea id="courseDescription" rows="4" placeholder="Описание курса..." required></textarea>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar"></i> Начало курса</label>
+                            <input type="date" id="courseStartDate" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar"></i> Конец курса</label>
+                            <input type="date" id="courseEndDate" required>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label><i class="fas fa-users"></i> Максимум учеников</label>
+                            <input type="number" id="courseMaxStudents" placeholder="30" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-ruble-sign"></i> Стоимость (руб./мес)</label>
+                            <input type="number" id="coursePrice" placeholder="1500" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Добавить курс
+                    </button>
+                    <button type="reset" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Очистить
+                    </button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-list"></i> Существующие курсы</h3>
+                <div id="coursesList">
+                    <p class="empty-state"><i class="fas fa-info-circle"></i> Курсы пока не добавлены</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="requestModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; width: 90%; max-width: 600px; border-radius: 15px; padding: 30px; max-height: 90vh; overflow-y: auto;">
+            <h3 style="color: var(--primary-blue); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-edit"></i> Обработка заявки
+            </h3>
+            
+            <div id="modalRequestContent"></div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-comment"></i> Ваш комментарий</label>
+                <textarea id="adminComment" rows="4" placeholder="Введите комментарий для пользователя..."></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-top: 25px;">
+                <button class="btn btn-success" onclick="approveRequest()">
+                    <i class="fas fa-check"></i> Одобрить
+                </button>
+                <button class="btn btn-danger" onclick="rejectRequest()">
+                    <i class="fas fa-times"></i> Отклонить
+                </button>
+                <button class="btn btn-secondary" onclick="closeModal()">
+                    <i class="fas fa-times"></i> Отмена
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let adminData = {
+            users: [],
+            requests: [],
+            courses: [],
+            currentRequestId: null
+        };
+        
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAdminData();
+            updateDashboard();
+            setupEventListeners();
+        });
+        
+        function loadAdminData() {
+
+            adminData.requests = JSON.parse(localStorage.getItem('admin_requests')) || [];
+
+            adminData.users = JSON.parse(localStorage.getItem('school25_users')) || [
+                {
+                    username: 'admin',
+                    fullName: 'Администратор',
+                    email: 'admin@school25.ru',
+                    phone: '+7 (8662) 123-45-67',
+                    type: 'admin',
+                    registered: '2024-01-01'
+                },
+                {
+                    username: 'student1',
+                    fullName: 'Иванов Иван Иванович',
+                    email: 'ivanov@school25.ru',
+                    phone: '+7 (999) 123-45-67',
+                    type: 'student',
+                    registered: '2024-01-15'
+                },
+                {
+                    username: 'teacher1',
+                    fullName: 'Петрова Мария Сергеевна',
+                    email: 'petrova@school25.ru',
+                    phone: '+7 (999) 987-65-43',
+                    type: 'teacher',
+                    registered: '2024-01-10'
+                }
+            ];
+            
+            adminData.courses = JSON.parse(localStorage.getItem('school25_courses')) || [];
+        }
+        
+
+        function saveAdminData() {
+            localStorage.setItem('admin_requests', JSON.stringify(adminData.requests));
+            localStorage.setItem('school25_courses', JSON.stringify(adminData.courses));
+        }
+        
+        function setupEventListeners() {
+            // Форма добавления курса
+            document.getElementById('addCourseForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addNewCourse();
+            });
+        }
+        function showSection(sectionId) {
+            // Скрыть все разделы
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            document.getElementById(sectionId + '-section').style.display = 'block';
+            
+
+            const titles = {
+                'dashboard': 'Панель управления',
+                'requests': 'Управление заявками',
+                'users': 'Управление пользователями',
+                'courses': 'Управление курсами',
+                'settings': 'Настройки системы',
+                'reports': 'Отчеты и аналитика'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionId] || 'Панель управления';
+
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.menu-item[onclick*="${sectionId}"]`).classList.add('active');
+
+            updateSection(sectionId);
+        }
+
+        function updateSection(sectionId) {
+            switch(sectionId) {
+                case 'dashboard':
+                    updateDashboard();
+                    break;
+                case 'requests':
+                    updateRequestsList();
+                    break;
+                case 'users':
+                    updateUsersTable();
+                    break;
+                case 'courses':
+                    updateCoursesList();
+                    break;
+            }
+        }
+        
+        
+        function updateDashboard() {
+
+            document.getElementById('totalUsers').textContent = adminData.users.length;
+            document.getElementById('pendingRequests').textContent = adminData.requests.filter(r => r.status === 'pending').length;
+            document.getElementById('totalCourses').textContent = adminData.courses.length;
+            
+            const today = new Date().toISOString().split('T')[0];
+            const todayRequests = adminData.requests.filter(r => r.createdAt.split('T')[0] === today);
+            document.getElementById('todayRequests').textContent = todayRequests.length;
+            
+            document.getElementById('pendingCount').textContent = adminData.requests.filter(r => r.status === 'pending').length;
+            
+ 
+            updateRecentRequests();
+        }
+        
+       
+        function updateRecentRequests() {
+            const container = document.getElementById('recentRequests');
+            const recentRequests = [...adminData.requests]
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .slice(0, 5);
+            
+            if (recentRequests.length === 0) {
+                container.innerHTML = '<p class="empty-state"><i class="fas fa-info-circle"></i> Заявок пока нет</p>';
+                return;
+            }
+            
+            let html = '';
+            recentRequests.forEach(request => {
+                const statusClass = `status-${request.status}`;
+                const statusText = getStatusText(request.status);
+                const userBadgeClass = `badge-${request.userType}`;
+                
+                html += `
+                    <div class="request-item">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                            <div>
+                                <h4 style="margin: 0 0 5px 0; color: var(--primary-blue);">${request.title}</h4>
+                                <p style="margin: 0; color: #666; font-size: 14px;">
+                                    <i class="fas fa-user"></i> ${request.userFullName}
+                                    <span class="user-badge ${userBadgeClass}">${getUserTypeLabel(request.userType)}</span>
+                                </p>
+                            </div>
+                            <div>
+                                <span class="request-status ${statusClass}">${statusText}</span>
+                            </div>
+                        </div>
+                        
+                        <p style="margin: 10px 0; color: #555; font-size: 14px;">${request.description.substring(0, 150)}...</p>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #888;">
+                            <div>
+                                <i class="far fa-calendar"></i> ${formatDate(request.createdAt)}
+                            </div>
+                            <div>
+                                <button class="btn btn-small" onclick="viewRequest('${request.id}')">
+                                    <i class="fas fa-eye"></i> Просмотр
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function updateRequestsList() {
+            const container = document.getElementById('adminRequestsList');
+            const filteredRequests = filterRequestsData();
+            
+            if (filteredRequests.length === 0) {
+                container.innerHTML = '<p class="empty-state"><i class="fas fa-info-circle"></i> Заявок не найдено</p>';
+                return;
+            }
+            
+            let html = '';
+            filteredRequests.forEach(request => {
+                const statusClass = `status-${request.status}`;
+                const statusText = getStatusText(request.status);
+                const userBadgeClass = `badge-${request.userType}`;
+                const typeText = getRequestTypeText(request.type);
+                
+                html += `
+                    <div class="request-item">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                            <div>
+                                <h4 style="margin: 0 0 5px 0; color: var(--primary-blue);">${request.title}</h4>
+                                <p style="margin: 0; color: #666; font-size: 14px;">
+                                    <i class="fas fa-user"></i> ${request.userFullName}
+                                    <span class="user-badge ${userBadgeClass}">${getUserTypeLabel(request.userType)}</span>
+                                    • <i class="fas fa-tag"></i> ${typeText}
+                                </p>
+                            </div>
+                            <div>
+                                <span class="request-status ${statusClass}">${statusText}</span>
+                            </div>
+                        </div>
+                        
+                        <p style="margin: 10px 0; color: #555;">${request.description}</p>
+                        
+                        ${request.adminComment ? `
+                            <div style="margin-top: 10px; padding: 10px; background: var(--very-light-blue); border-radius: 5px; border-left: 3px solid var(--secondary-blue);">
+                                <strong><i class="fas fa-comment"></i> Ваш комментарий:</strong>
+                                <p style="margin: 5px 0 0 0;">${request.adminComment}</p>
+                            </div>
+                        ` : ''}
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                            <div style="font-size: 12px; color: #888;">
+                                <i class="far fa-calendar"></i> Создана: ${formatDate(request.createdAt)}
+                                ${request.deadline ? `<br><i class="far fa-clock"></i> Срок: ${formatDate(request.deadline)}` : ''}
+                            </div>
+                            
+                            <div class="action-buttons">
+                                ${request.status === 'pending' ? `
+                                    <button class="btn btn-success btn-small" onclick="openRequestModal('${request.id}')">
+                                        <i class="fas fa-edit"></i> Обработать
+                                    </button>
+                                ` : ''}
+                                <button class="btn btn-small" onclick="viewRequest('${request.id}')">
+                                    <i class="fas fa-eye"></i> Детали
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        
+        function filterRequestsData() {
+            const statusFilter = document.getElementById('filterStatus').value;
+            const typeFilter = document.getElementById('filterType').value;
+            const dateFilter = document.getElementById('filterDate').value;
+            
+            let filtered = [...adminData.requests];
+            
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(r => r.status === statusFilter);
+            }
+            
+            if (typeFilter !== 'all') {
+                filtered = filtered.filter(r => r.type === typeFilter);
+            }
+            
+            if (dateFilter) {
+                filtered = filtered.filter(r => r.createdAt.split('T')[0] === dateFilter);
+            }
+            
+           
+            return filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        }
+        
+      
+        function filterRequests() {
+            updateRequestsList();
+        }
+        
+        
+        function resetFilters() {
+            document.getElementById('filterStatus').value = 'all';
+            document.getElementById('filterType').value = 'all';
+            document.getElementById('filterDate').value = '';
+            updateRequestsList();
+        }
+        
+        // Открыть модальное окно заявки
+        function openRequestModal(requestId) {
+            adminData.currentRequestId = requestId;
+            const request = adminData.requests.find(r => r.id === requestId);
+            
+            if (!request) return;
+            
+            const modalContent = document.getElementById('modalRequestContent');
+            const userBadgeClass = `badge-${request.userType}`;
+            const typeText = getRequestTypeText(request.type);
+            
+            modalContent.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: var(--primary-blue); margin-bottom: 10px;">${request.title}</h4>
+                    <p style="margin: 0 0 5px 0; color: #666;">
+                        <i class="fas fa-user"></i> <strong>От:</strong> ${request.userFullName}
+                        <span class="user-badge ${userBadgeClass}">${getUserTypeLabel(request.userType)}</span>
+                    </p>
+                    <p style="margin: 0 0 5px 0; color: #666;">
+                        <i class="fas fa-tag"></i> <strong>Тип:</strong> ${typeText}
+                    </p>
+                    <p style="margin: 0 0 15px 0; color: #666;">
+                        <i class="far fa-calendar"></i> <strong>Создана:</strong> ${formatDate(request.createdAt)}
+                    </p>
+                </div>
+                
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <strong><i class="fas fa-align-left"></i> Описание заявки:</strong>
+                    <p style="margin: 10px 0 0 0; white-space: pre-line;">${request.description}</p>
+                </div>
+                
+                ${request.deadline ? `
+                    <p style="color: #666; margin-bottom: 15px;">
+                        <i class="far fa-clock"></i> <strong>Желаемый срок выполнения:</strong> ${formatDate(request.deadline)}
+                    </p>
+                ` : ''}
+            `;
+            
+            document.getElementById('adminComment').value = request.adminComment || '';
+            document.getElementById('requestModal').style.display = 'flex';
+        }
+        
+       
+        function closeModal() {
+            document.getElementById('requestModal').style.display = 'none';
+            adminData.currentRequestId = null;
+        }
+        
+        function approveRequest() {
+            processRequest('approved');
+        }
+        
+        
+        function rejectRequest() {
+            processRequest('rejected');
+        }
+        
+      
+        function processRequest(newStatus) {
+            const requestId = adminData.currentRequestId;
+            const comment = document.getElementById('adminComment').value;
+            
+            if (!requestId) return;
+            
+            
+            const requestIndex = adminData.requests.findIndex(r => r.id === requestId);
+            if (requestIndex === -1) return;
+            
+       
+            adminData.requests[requestIndex].status = newStatus;
+            adminData.requests[requestIndex].adminComment = comment;
+            adminData.requests[requestIndex].updatedAt = new Date().toISOString();
+           
+            saveAdminData();
+            
+            
+            updateUserRequest(requestId, newStatus, comment);
+      
+            closeModal();
+            
+          
+            updateDashboard();
+            updateRequestsList();
+            
+            showNotification(`Заявка успешно ${newStatus === 'approved' ? 'одобрена' : 'отклонена'}!`, 'success');
+        }
+
+        function updateUserRequest(requestId, newStatus, comment) {
+
+            const request = adminData.requests.find(r => r.id === requestId);
+            if (!request || !request.userId) return;
+            
+            // Загрузить заявки пользователя
+            const userRequestsKey = `school25_requests_${request.userId}`;
+            let userRequests = JSON.parse(localStorage.getItem(userRequestsKey)) || [];
+  
+            const userRequestIndex = userRequests.findIndex(r => r.id === requestId);
+            if (userRequestIndex !== -1) {
+                userRequests[userRequestIndex].status = newStatus;
+                userRequests[userRequestIndex].adminComment = comment;
+                userRequests[userRequestIndex].updatedAt = new Date().toISOString();
+                
+                localStorage.setItem(userRequestsKey, JSON.stringify(userRequests));
+            }
+        }
+        function viewRequest(requestId) {
+            openRequestModal(requestId);
+        }
+        
+        function updateUsersTable() {
+            const tbody = document.getElementById('usersTable');
+            
+            if (adminData.users.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: #666;">
+                            <i class="fas fa-users"></i> Пользователи не найдены
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let html = '';
+            adminData.users.forEach(user => {
+                html += `
+                    <tr>
+                        <td><code>${user.username}</code></td>
+                        <td><strong>${user.fullName}</strong></td>
+                        <td><span class="user-badge badge-${user.type}">${getUserTypeLabel(user.type)}</span></td>
+                        <td>${user.email}</td>
+                        <td>${user.phone}</td>
+                        <td>${formatDate(user.registered)}</td>
+                        <td>
+                            <button class="btn btn-small" onclick="editUser('${user.username}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-small" onclick="deleteUser('${user.username}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+        
+        function addNewUser() {
+            const username = prompt('Введите логин нового пользователя:');
+            if (!username) return;
+            
+            const fullName = prompt('Введите ФИО пользователя:');
+            if (!fullName) return;
+            
+            const email = prompt('Введите email пользователя:');
+            if (!email) return;
+            
+            const type = prompt('Введите тип пользователя (admin/teacher/student/parent):');
+            if (!['admin', 'teacher', 'student', 'parent'].includes(type)) {
+                alert('Неверный тип пользователя!');
+                return;
+            }
+            
+            const newUser = {
+                username: username,
+                fullName: fullName,
+                email: email,
+                phone: '',
+                type: type,
+                registered: new Date().toISOString()
+            };
+            
+            adminData.users.push(newUser);
+            saveAdminData();
+            updateUsersTable();
+            
+            showNotification('Пользователь успешно добавлен!', 'success');
+        }
+        
+        function editUser(username) {
+            const user = adminData.users.find(u => u.username === username);
+            if (!user) return;
+            
+            const newFullName = prompt('Введите новое ФИО:', user.fullName);
+            if (newFullName) user.fullName = newFullName;
+            
+            const newEmail = prompt('Введите новый email:', user.email);
+            if (newEmail) user.email = newEmail;
+            
+            const newPhone = prompt('Введите новый телефон:', user.phone);
+            if (newPhone) user.phone = newPhone;
+            
+            saveAdminData();
+            updateUsersTable();
+            
+            showNotification('Данные пользователя обновлены!', 'success');
+        }
+        
+        
+        function deleteUser(username) {
+            if (username === 'admin') {
+                alert('Нельзя удалить главного администратора!');
+                return;
+            }
+            
+            if (confirm('Вы уверены, что хотите удалить этого пользователя?')) {
+                adminData.users = adminData.users.filter(u => u.username !== username);
+                saveAdminData();
+                updateUsersTable();
+                
+                showNotification('Пользователь успешно удален!', 'success');
+            }
+        }
+        
+        
+        function addNewCourse() {
+            const name = document.getElementById('courseName').value;
+            const teacher = document.getElementById('courseTeacher').value;
+            const description = document.getElementById('courseDescription').value;
+            const startDate = document.getElementById('courseStartDate').value;
+            const endDate = document.getElementById('courseEndDate').value;
+            const maxStudents = document.getElementById('courseMaxStudents').value;
+            const price = document.getElementById('coursePrice').value;
+            
+            if (!name || !teacher || !description || !startDate || !endDate || !maxStudents || !price) {
+                showNotification('Заполните все поля!', 'error');
+                return;
+            }
+            
+            const newCourse = {
+                id: 'COURSE-' + Date.now(),
+                name: name,
+                teacher: teacher,
+                description: description,
+                startDate: startDate,
+                endDate: endDate,
+                maxStudents: parseInt(maxStudents),
+                price: parseInt(price),
+                students: [],
+                createdAt: new Date().toISOString()
+            };
+            
+            adminData.courses.push(newCourse);
+            saveAdminData();
+            
+            
+            document.getElementById('addCourseForm').reset();
+            
+            
+            updateCoursesList();
+            
+            showNotification('Курс успешно добавлен!', 'success');
+        }
+        
+        
+        function updateCoursesList() {
+            const container = document.getElementById('coursesList');
+            
+            if (adminData.courses.length === 0) {
+                container.innerHTML = '<p class="empty-state"><i class="fas fa-info-circle"></i> Курсы пока не добавлены</p>';
+                return;
+            }
+            
+            let html = '';
+            adminData.courses.forEach(course => {
+                html += `
+                    <div class="request-item">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                            <div>
+                                <h4 style="margin: 0 0 5px 0; color: var(--primary-blue);">${course.name}</h4>
+                                <p style="margin: 0; color: #666; font-size: 14px;">
+                                    <i class="fas fa-chalkboard-teacher"></i> Преподаватель: ${course.teacher}
+                                </p>
+                            </div>
+                            <div>
+                                <span style="background: var(--light-blue); color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;">
+                                    ${course.price} руб./мес
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <p style="margin: 10px 0; color: #555; font-size: 14px;">${course.description}</p>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                            <div style="font-size: 12px; color: #888;">
+                                <i class="far fa-calendar"></i> ${formatDate(course.startDate)} - ${formatDate(course.endDate)}
+                                <br>
+                                <i class="fas fa-users"></i> ${course.students.length}/${course.maxStudents} учеников
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn btn-success btn-small" onclick="editCourse('${course.id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-small" onclick="deleteCourse('${course.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+     
+        function editCourse(courseId) {
+            alert('Функция редактирования курса в разработке');
+        }
+        
+        function deleteCourse(courseId) {
+            if (confirm('Вы уверены, что хотите удалить этот курс?')) {
+                adminData.courses = adminData.courses.filter(c => c.id !== courseId);
+                saveAdminData();
+                updateCoursesList();
+                
+                showNotification('Курс успешно удален!', 'success');
+            }
+        }
+        
+      
+        function refreshData() {
+            loadAdminData();
+            updateDashboard();
+            showNotification('Данные обновлены!', 'success');
+        }
+        
+        // Сгенерировать отчет
+        function generateReport() {
+            alert('Функция генерации отчета в разработке');
+        }
+        
+     
+        function showNotification(message, type = 'info') {
+           
+            const notification = document.createElement('div');
+            notification.className = `notification ${type} show`;
+            notification.innerHTML = `
+                <span class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></span>
+                <span>${message}</span>
+            `;
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                min-width: 300px;
+                background: ${type === 'success' ? 'var(--light-blue)' : type === 'error' ? '#e74c3c' : 'var(--secondary-blue)'};
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+        
+        // Вспомогательные функции
+        function getStatusText(status) {
+            const statuses = {
+                'pending': 'На рассмотрении',
+                'approved': 'Одобрена',
+                'rejected': 'Отклонена'
+            };
+            return statuses[status] || status;
+        }
+        
+        function getRequestTypeText(type) {
+            const types = {
+                'academic': 'Учебные вопросы',
+                'medical': 'Медицинские вопросы',
+                'vacation': 'Отпуск/Освобождение',
+                'document': 'Запрос документов',
+                'other': 'Другое'
+            };
+            return types[type] || type;
+        }
+        
+        function getUserTypeLabel(type) {
+            const labels = {
+                'admin': 'Администратор',
+                'teacher': 'Учитель',
+                'student': 'Ученик',
+                'parent': 'Родитель'
+            };
+            return labels[type] || 'Пользователь';
+        }
+        
+        function formatDate(dateString) {
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('ru-RU');
+            } catch {
+                return dateString;
+            }
+        }
+    </script>
+</body>
+</html>
